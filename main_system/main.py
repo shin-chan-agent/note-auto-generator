@@ -5,21 +5,18 @@ from google import genai
 
 from user_config import AI_SERVICES
 
-from config import (
-    GEMINI_MODEL_ARTICLE,
-)
-
-from theme_manager import (
+from main_system.theme_manager import (
     get_theme_and_angle,
     mark_combination_completed,
 )
 
-from article_history import (
+from main_system.article_history import (
     get_past_articles_text,
     save_article,
 )
 
 from article.prompt import get_article_prompt
+
 from article.generator import (
     generate_article,
     extract_title,
@@ -43,7 +40,6 @@ from utils.content_saver import (
 
 from utils.logger import (
     log_info,
-    log_warning,
     log_error,
 )
 
@@ -216,14 +212,15 @@ def main():
             client=client,
             prompt=prompt,
             knowledge=knowledge,
+            past_articles_text=past_articles_text,
         )
 
         article = result["article"]
         evaluation = result["evaluation"]
         score = result["score"]
         seo_score = result["seo_score"]
-        duplicate = result["duplicate"]
-        latest = result["latest"]
+        duplicate = result["duplicate_result"]
+        latest = result["latest_result"]
 
         title = extract_title(article)
 
@@ -321,7 +318,6 @@ def main():
             "Note AI Agentを正常終了しました。"
         )
 
-
     except GeminiDailyQuotaExceeded as e:
 
         log_error(
@@ -340,7 +336,6 @@ def main():
             )
 
         raise
-
 
     except Exception as e:
 
