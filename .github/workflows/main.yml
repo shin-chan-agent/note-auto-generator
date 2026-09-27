@@ -44,7 +44,7 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-        run: python main_system/main.py
+        run: python -m main_system.main
 
       - name: Upload Gemini response
         if: always()
@@ -60,8 +60,8 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add \
-            combination_history.json \
-            article_history.json \
+            main_system/combination_history.json \
+            main_system/article_history.json \
             utils/ai_knowledge.json \
             logs/ \
             generated/
