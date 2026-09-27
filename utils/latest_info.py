@@ -1,17 +1,14 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+from google.genai import types
+
 from utils.logger import (
     log_info,
     log_error,
 )
 
-from google.genai import types
-
-from config import (
-    AI_SERVICES,
-    GEMINI_MODEL_LATEST,
-)
+from main_system.config import GEMINI_MODEL_LATEST
 
 from utils.gemini_client import call_gemini
 
@@ -25,88 +22,61 @@ from utils.knowledge_manager import (
 )
 
 
-def create_prompt(service):
+def create_prompt(service_name):
     """
-    最新情報取得用プロンプトを作成する。
+    サービス名から公式情報を検索するためのプロンプト。
     """
-
-    official_domains = "\n".join(
-        f"- {domain}"
-        for domain in service["official_domains"]
-    )
 
     return f"""
 あなたはAIサービスの公式情報を整理する専門家です。
 
 Google Searchを利用し、
-「{service["name"]}」の最新情報を取得してください。
+「{service_name}」の現在の最新情報を取得してください。
 
-【情報取得ルール】
+【最重要ルール】
 
-以下の公式ドメインを最優先してください。
-
-{official_domains}
-
-これらのドメインに情報が存在しない場合のみ、
-信頼できる第三者サイトを利用してください。
-
-【重要】
-
+・まずサービス名から公式サイトを特定してください。
 ・公式サイトを最優先してください。
 ・公式ドキュメントを優先してください。
-・推測は禁止です。
-・情報が存在しない項目は、
-　　"null" または "[]"
-　を設定してください。
+・公式料金ページ、公式ヘルプ、公式ブログなども確認してください。
+・公式情報が存在する場合、第三者サイトを主要な根拠として使用しないでください。
+・公式情報で確認できない内容を推測しないでください。
+・URLを推測して作成しないでください。
+・検索結果のURLを実際に確認してください。
 
 【取得対象】
 
 ・利用可能なモデル
-　　→ すべて列挙してください。
-　　　 無料・有料を問いません。
-　　　 API専用モデルも含めてください。
+　無料・有料を問わず主要モデルを列挙してください。
+　API専用モデルも含めてください。
+
 ・料金プラン
 ・API料金
-・機能
-　　→ 主要機能を漏れ無く列挙してください。
+・主要機能
 ・制限事項
 ・注意事項
 
 【情報の条件】
 
 ・現在提供中の情報を取得してください。
-・公開予定・提供予定・開発予定の情報は含めないでください。
-・非推奨だが利用可能なものは "deprecated" を設定してください。
-・提供終了・新規利用不可のものは "discontinued" を設定してください。
-・現在利用可能なものは "available" を設定してください。
+・公開予定、提供予定、開発予定の情報は含めないでください。
+・非推奨だが利用可能なものは "deprecated"
+・提供終了・新規利用不可のものは "discontinued"
+・現在利用可能なものは "available"
 
-【statusルール】
-
-各項目には必ず "status" を含めてください。
-使用できる値は次の3つのみです。
-
-　・available
-　　　現在利用可能
-　・deprecated
-　　　非推奨だが利用可能
-　・discontinued
-　　　提供終了・新規利用不可
-
-statusが判断できない場合は推測せず、availableを使用してください。
+statusが判断できない場合は推測せず、
+"available"を使用してください。
 
 【出力】
 
-・JSONのみ返してください。
-・Markdown禁止
-・コードブロック禁止
-・説明禁止
-・コメント禁止
+JSONのみ返してください。
+Markdown、コードブロック、説明、コメントは禁止です。
 
-以下のJSON構造を厳密に守ってください。
+以下の構造を厳密に守ってください。
 
 {{
   "name": "",
-  "status": "",
+  "status": "available",
   "last_verified": "",
   "updated_at": "",
   "sources": [
@@ -121,7 +91,7 @@ statusが判断できない場合は推測せず、availableを使用してく�
       "id": "",
       "name": "",
       "aliases": [],
-      "status": "",
+      "status": "available",
       "effective_date": "",
       "last_updated": "",
       "description": "",
@@ -134,7 +104,7 @@ statusが判断できない場合は推測せず、availableを使用してく�
       "id": "",
       "name": "",
       "aliases": [],
-      "status": "",
+      "status": "available",
       "effective_date": "",
       "last_updated": "",
       "billing": "",
@@ -154,7 +124,7 @@ statusが判断できない場合は推測せず、availableを使用してく�
       "id": "",
       "name": "",
       "aliases": [],
-      "status": "",
+      "status": "available",
       "effective_date": "",
       "last_updated": "",
       "description": "",
@@ -165,7 +135,7 @@ statusが判断できない場合は推測せず、availableを使用してく�
     {{
       "id": "",
       "name": "",
-      "status": "",
+      "status": "available",
       "last_updated": "",
       "description": "",
       "category": ""
@@ -176,7 +146,7 @@ statusが判断できない場合は推測せず、availableを使用してく�
       "id": "",
       "title": "",
       "category": "",
-      "status": "",
+      "status": "available",
       "description": "",
       "last_updated": ""
     }}
@@ -185,15 +155,14 @@ statusが判断できない場合は推測せず、availableを使用してく�
 """
 
 
-def validate_service_data(service_data, service_id):
-    """
-    最新情報JSONの基本構造を確認する。
-
-    不完全なデータの場合はFalseを返し、
-    AI知識DBへの保存を防ぐ。
-    """
-
-    if not isinstance(service_data, dict):
+def validate_service_data(
+    service_data,
+    service_id,
+):
+    if not isinstance(
+        service_data,
+        dict,
+    ):
         log_error(
             f"最新情報JSONがdictではありません: {service_id}"
         )
@@ -217,15 +186,13 @@ def validate_service_data(service_data, service_id):
             )
             return False
 
-    list_fields = [
+    for field in [
         "models",
         "plans",
         "features",
         "limitations",
         "notes",
-    ]
-
-    for field in list_fields:
+    ]:
 
         if not isinstance(
             service_data[field],
@@ -250,14 +217,15 @@ def validate_service_data(service_data, service_id):
     return True
 
 
-def fetch_service_info(client, service_id):
+def fetch_service_info(
+    client,
+    service_id,
+):
     """
-    1サービス分の最新情報を取得する。
+    サービス名だけを使って最新情報を取得する。
     """
 
-    service = AI_SERVICES[service_id]
-
-    prompt = create_prompt(service)
+    prompt = create_prompt(service_id)
 
     response = call_gemini(
         client,
@@ -280,12 +248,14 @@ def fetch_service_info(client, service_id):
     with open(
         "gemini_response.txt",
         "w",
-        encoding="utf-8"
+        encoding="utf-8",
     ) as f:
         f.write(response.text)
 
     try:
-        service_data = parse_json(response.text)
+        service_data = parse_json(
+            response.text
+        )
 
     except Exception as e:
         log_error(
@@ -294,27 +264,27 @@ def fetch_service_info(client, service_id):
         log_error(str(e))
         return None
 
-    # ==========================
-    # JSON構造チェック
-    # ==========================
-
     if not validate_service_data(
         service_data,
         service_id,
     ):
         return None
 
-    # ==========================
-    # AI知識DBデータ軽量化
-    # ==========================
+    # サービス名を設定
+    service_data["name"] = (
+        service_data.get("name")
+        or service_id
+    )
 
-    # ① sourcesを最大5件
-    if "sources" in service_data:
-        service_data["sources"] = (
-            service_data["sources"][:5]
-        )
+    # sources 最大5件
+    service_data["sources"] = (
+        service_data.get(
+            "sources",
+            [],
+        )[:5]
+    )
 
-    # ② descriptionを200文字まで
+    # description 最大200文字
     for section in [
         "models",
         "features",
@@ -325,20 +295,19 @@ def fetch_service_info(client, service_id):
             section,
             [],
         ):
-            if "description" in item:
-                description = item.get(
-                    "description"
+            description = item.get(
+                "description"
+            )
+
+            if isinstance(
+                description,
+                str,
+            ):
+                item["description"] = (
+                    description[:200]
                 )
 
-                if isinstance(
-                    description,
-                    str,
-                ):
-                    item["description"] = (
-                        description[:200]
-                    )
-
-    # ③ aliasesを最大3件
+    # aliases 最大3件
     for section in [
         "models",
         "plans",
@@ -348,21 +317,15 @@ def fetch_service_info(client, service_id):
             section,
             [],
         ):
-            if "aliases" in item:
+            aliases = item.get(
+                "aliases"
+            )
 
-                aliases = item.get(
-                    "aliases"
-                )
-
-                if isinstance(
-                    aliases,
-                    list,
-                ):
-                    item["aliases"] = aliases[:3]
-
-    # ==========================
-    # DB更新日時
-    # ==========================
+            if isinstance(
+                aliases,
+                list,
+            ):
+                item["aliases"] = aliases[:3]
 
     now = datetime.now(
         ZoneInfo("Asia/Tokyo")
@@ -370,6 +333,7 @@ def fetch_service_info(client, service_id):
 
     service_data["updated_at"] = now
     service_data["last_verified"] = now
+    service_data["update_failed"] = False
 
     log_info(
         f"取得サービス: {service_id}"
@@ -378,9 +342,12 @@ def fetch_service_info(client, service_id):
     return service_data
 
 
-def fetch_latest_info(client, services):
+def fetch_latest_info(
+    client,
+    services,
+):
     """
-    指定したサービスの最新情報を取得し、
+    指定サービスの最新情報を取得し、
     AI知識DBへ反映する。
     """
 
@@ -399,23 +366,30 @@ def fetch_latest_info(client, services):
             f"{service_id} の最新情報を取得します"
         )
 
-        service_data = fetch_service_info(
-            client,
-            service_id,
-        )
+        try:
+            service_data = fetch_service_info(
+                client,
+                service_id,
+            )
 
-        if service_data is None:
+        except Exception as e:
+
+            log_error(
+                f"{service_id} の最新情報取得失敗"
+            )
+            log_error(str(e))
+
             mark_update_failed(
                 service_id
             )
             continue
 
-        service_data["update_failed"] = False
+        if service_data is None:
 
-
-        # ==========================
-        # AI知識DBへ反映
-        # ==========================
+            mark_update_failed(
+                service_id
+            )
+            continue
 
         merge_service(
             service_id,
