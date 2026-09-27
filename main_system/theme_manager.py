@@ -6,7 +6,7 @@ from pathlib import Path
 from user_config import THEMES, ANGLES
 
 from utils.gemini_client import call_gemini
-from utils.json_parser import parse_json_response
+from utils.json_parser import parse_json
 from utils.logger import (
     log_info,
     log_warning,
@@ -163,7 +163,7 @@ def _check_compatibility(client, combinations):
             contents=prompt,
         )
 
-        data = parse_json_response(
+        data = parse_json(
             response.text
         )
 
