@@ -12,10 +12,13 @@ from utils.logger import (
     log_warning,
     log_error,
 )
-from config import GEMINI_MODEL_EVALUATION
+
+from main_system.config import GEMINI_MODEL_EVALUATION
 
 
-COMBINATION_HISTORY_FILE = Path("main_system/combination_history.json")
+COMBINATION_HISTORY_FILE = (
+    Path(__file__).parent / "combination_history.json"
+)
 
 
 def _config_hash():
@@ -32,7 +35,9 @@ def _config_hash():
         sort_keys=True,
     )
 
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return hashlib.sha256(
+        text.encode("utf-8")
+    ).hexdigest()
 
 
 def get_all_combinations():
@@ -147,23 +152,32 @@ def _check_compatibility(client, combinations):
     if not combinations:
         return []
 
-    prompt = _build_compatibility_prompt(combinations)
+    prompt = _build_compatibility_prompt(
+        combinations
+    )
 
     try:
         response = call_gemini(
             client=client,
             model=GEMINI_MODEL_EVALUATION,
-            prompt=prompt,
+            contents=prompt,
         )
 
-        data = parse_json_response(response.text)
+        data = parse_json_response(
+            response.text
+        )
 
-        results = data.get("results", [])
+        results = data.get(
+            "results",
+            [],
+        )
 
         valid = []
 
         for item in results:
+
             if item.get("valid") is True:
+
                 theme = item.get("theme")
                 angle = item.get("angle")
 
@@ -178,9 +192,11 @@ def _check_compatibility(client, combinations):
         return valid
 
     except Exception as e:
+
         log_error(
             f"テーマ×切り口の適合性判定に失敗しました: {e}"
         )
+
         raise
 
 
@@ -203,7 +219,6 @@ def get_valid_combinations(client):
     all_combinations = get_all_combinations()
     history = _load_history()
 
-    # 設定変更なし・有効組み合わせが存在する場合
     if (
         history
         and history.get("config_hash") == current_hash
@@ -250,30 +265,42 @@ def get_theme_and_angle(client):
     """
 
     current_hash = _config_hash()
-    valid_combinations = get_valid_combinations(client)
+
+    valid_combinations = get_valid_combinations(
+        client
+    )
+
     history = _load_history()
 
-    # 念のため設定変更時は履歴を初期化
-    if not history or history.get("config_hash") != current_hash:
+    if (
+        not history
+        or history.get("config_hash") != current_hash
+    ):
         history = {
             "config_hash": current_hash,
             "valid_combinations": valid_combinations,
             "used_combinations": [],
         }
 
-    used = history.get("used_combinations", [])
+    used = history.get(
+        "used_combinations",
+        [],
+    )
 
     unused = [
         combination
         for combination in valid_combinations
         if not any(
-            _is_same_combination(combination, item)
+            _is_same_combination(
+                combination,
+                item,
+            )
             for item in used
         )
     ]
 
-    # 全組み合わせを使用済み
     if not unused:
+
         log_info(
             "すべての有効な組み合わせを使用しました。"
             "新しいサイクルを開始します。"
@@ -282,16 +309,24 @@ def get_theme_and_angle(client):
         used = []
         unused = valid_combinations.copy()
 
-    selected = random.choice(unused)
+    selected = random.choice(
+        unused
+    )
 
     history["used_combinations"] = used
 
     _save_history(history)
 
-    return selected["theme"], selected["angle"]
+    return (
+        selected["theme"],
+        selected["angle"],
+    )
 
 
-def mark_combination_completed(theme, angle):
+def mark_combination_completed(
+    theme,
+    angle,
+):
     """
     記事生成が正常に完了した組み合わせを使用済みにする。
     """
@@ -306,10 +341,16 @@ def mark_combination_completed(theme, angle):
         "angle": angle,
     }
 
-    used = history.get("used_combinations", [])
+    used = history.get(
+        "used_combinations",
+        [],
+    )
 
     if not any(
-        _is_same_combination(combination, item)
+        _is_same_combination(
+            combination,
+            item,
+        )
         for item in used
     ):
         used.append(combination)
