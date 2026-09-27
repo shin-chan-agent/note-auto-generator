@@ -42,7 +42,7 @@ Gemini APIとGitHub Actionsを使って、AI関連のnote記事を自動生成�
 
 作成するnote記事全体のコンセプトを設定します。
 
-```python
+```
 NOTE_CONCEPT = """
 AIを活用した仕事効率化やAIツールの実践的な使い方を、
 初心者にも分かりやすく解説するnote
