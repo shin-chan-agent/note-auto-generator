@@ -34,6 +34,9 @@ Gemini APIとGitHub Actionsを使って、AI関連のnote記事を自動生成�
 
 基本的なカスタマイズは `user_config.py` で行います。
 
+それ以外のファイルの設定値は変更しないでください。
+エラーとなっても責任を負いかねます。
+
 
 ### NOTE_CONCEPT
 
