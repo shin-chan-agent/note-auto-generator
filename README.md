@@ -70,15 +70,20 @@ AI_SERVICES = [
 ### 文字数
 
 ARTICLE_MIN_LENGTH = 8000
+
 ARTICLE_TARGET_LENGTH = 10000
+
 ARTICLE_MAX_LENGTH = 12000
 
 
 ### 品質設定
 
 MIN_SCORE = 90
+
 MIN_SEO_SCORE = 90
+
 MAX_REWRITE = 3
+
 MAX_RETRY = 3
 
 
@@ -101,10 +106,15 @@ GEMINI_API_KEY
 ### メール
 
 SMTP_SERVER
+
 SMTP_PORT
+
 SMTP_USER
+
 SMTP_PASSWORD
+
 SENDER_EMAIL
+
 RECIPIENT_EMAIL
 
 
@@ -179,6 +189,7 @@ main_system/article_history.json
 ## 9. 無料での運用について
 
 このシステムは、外部の有料サービスへの加入なしで構築・運用できる構成になっています。
+
 ただし、Gemini APIやGitHub Actionsなどの無料枠・利用条件は変更される場合があります。
 
 利用時は各サービスの最新の利用条件を確認してください。
@@ -192,8 +203,11 @@ GitHub Actionsの実行ログを確認してください。
 特に以下を確認します。
 
 GEMINI_API_KEY
+
 Gemini APIの利用状況
+
 GitHub Secretsの設定
+
 SMTP設定
 
 
@@ -202,14 +216,20 @@ SMTP設定
 以下を確認してください。
 
 SMTP_SERVER
+
 SMTP_PORT
+
 SMTP_USER
+
 SMTP_PASSWORD
+
 SENDER_EMAIL
+
 RECIPIENT_EMAI
 
 
 ### 記事生成が繰り返し失敗する
 
 GitHub Actionsのログからエラー内容を確認してください。
+
 品質スコアやSEOスコアが基準を満たさない場合は、自動リライトが行われます。
