@@ -1,5 +1,5 @@
 from utils.gemini_client import call_gemini
-from config import GEMINI_MODEL_EVALUATION
+from main_system.config import GEMINI_MODEL_EVALUATION
 
 
 def quality_check(
@@ -80,7 +80,7 @@ LATEST: OK または NG
     response = call_gemini(
         client=client,
         model=GEMINI_MODEL_EVALUATION,
-        prompt=prompt,
+        contents=prompt,
     )
 
     return response.text
