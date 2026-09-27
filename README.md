@@ -1,8 +1,8 @@
-Note AI Agent
+# Note AI Agent
 
 Gemini APIとGitHub Actionsを使って、AI関連のnote記事を自動生成するシステムです。
 
-主な機能
+## 主な機能
 
 - AI関連note記事の自動生成
 - テーマ×切り口の自動選択
@@ -18,7 +18,7 @@ Gemini APIとGitHub Actionsを使って、AI関連のnote記事を自動生成�
 
 ---
 
-必要なもの
+## 必要なもの
 
 - GitHubアカウント
 - Gemini APIキー
@@ -26,19 +26,19 @@ Gemini APIとGitHub Actionsを使って、AI関連のnote記事を自動生成�
 
 ---
 
-1. リポジトリを用意する
+## 1. リポジトリを用意する
 
 このシステムを自分のGitHubリポジトリにアップロードします。
 
 ---
 
-2. user_config.pyを設定する
+## 2. user_config.pyを設定する
 
 購入後に主に変更するのは "user_config.py" です。
 
 記事の方向性、テーマ、切り口、AIサービス、文字数、品質基準などを設定できます。
 
-NOTE_CONCEPT
+### NOTE_CONCEPT
 
 作成するnote記事全体のコンセプトを設定します。
 
@@ -51,7 +51,7 @@ AIを活用した仕事効率化やAIツールの実践的な使い方を、
 
 ---
 
-THEMES
+### THEMES
 
 記事のテーマを設定します。
 
@@ -66,7 +66,7 @@ THEMES = [
 
 ---
 
-ANGLES
+### ANGLES
 
 記事の切り口を設定します。
 
@@ -84,7 +84,7 @@ ANGLES = [
 
 ---
 
-AI_SERVICES
+### AI_SERVICES
 
 記事作成時に扱うAIサービスを設定します。
 
@@ -100,7 +100,7 @@ AIサービスの名称だけを設定してください。
 
 ---
 
-3. 記事の文字数を設定する
+## 3. 記事の文字数を設定する
 
 以下の3項目で記事の文字数を設定します。
 
@@ -108,19 +108,19 @@ ARTICLE_MIN_LENGTH = 8000
 ARTICLE_TARGET_LENGTH = 10000
 ARTICLE_MAX_LENGTH = 12000
 
-ARTICLE_MIN_LENGTH
+### ARTICLE_MIN_LENGTH
 
 記事として許容する最低文字数です。
 
 この文字数を下回った記事は採用されず、再生成されます。
 
-ARTICLE_TARGET_LENGTH
+### ARTICLE_TARGET_LENGTH
 
 AIが目標とする文字数です。
 
 必ずこの文字数になるわけではありませんが、記事生成時の目安として使用されます。
 
-ARTICLE_MAX_LENGTH
+### ARTICLE_MAX_LENGTH
 
 記事として許容する最大文字数です。
 
@@ -128,14 +128,14 @@ ARTICLE_MAX_LENGTH
 
 ---
 
-4. 品質設定を行う
+## 4. 品質設定を行う
 
 MIN_SCORE = 90
 MIN_SEO_SCORE = 90
 MAX_REWRITE = 3
 MAX_RETRY = 3
 
-MIN_SCORE
+### MIN_SCORE
 
 記事の品質スコアの合格基準です。
 
@@ -149,7 +149,7 @@ MIN_SCORE = 90
 
 ---
 
-MIN_SEO_SCORE
+### MIN_SEO_SCORE
 
 SEOスコアの合格基準です。
 
@@ -161,7 +161,7 @@ MIN_SEO_SCORE = 90
 
 ---
 
-MAX_REWRITE
+### MAX_REWRITE
 
 品質基準を満たさなかった場合に行う自動リライトの最大回数です。
 
@@ -171,7 +171,7 @@ MAX_REWRITE = 3
 
 ---
 
-MAX_RETRY
+### MAX_RETRY
 
 Gemini APIなどでエラーが発生した場合の再試行回数です。
 
@@ -179,7 +179,7 @@ MAX_RETRY = 3
 
 ---
 
-5. GitHub Secretsを設定する
+## 5. GitHub Secretsを設定する
 
 GitHubリポジトリの
 
@@ -189,13 +189,13 @@ GitHubリポジトリの
 
 ---
 
-6. Gemini APIを設定する
+## 6. Gemini APIを設定する
 
 以下のSecretを登録します。
 
 GEMINI_API_KEY
 
-GEMINI_API_KEY
+### GEMINI_API_KEY
 
 Google AI Studioなどで取得したGemini APIキーを入力します。
 
@@ -205,7 +205,7 @@ APIキーは "user_config.py" やPythonファイルに直接記載しないで�
 
 ---
 
-7. メール設定を行う
+## 7. メール設定を行う
 
 以下の6項目をGitHub Secretsに登録します。
 
@@ -216,7 +216,7 @@ SMTP_PASSWORD
 SENDER_EMAIL
 RECIPIENT_EMAIL
 
-SMTP_SERVER
+### SMTP_SERVER
 
 メール送信用SMTPサーバーのアドレスです。
 
@@ -228,7 +228,7 @@ smtp.example.com
 
 ---
 
-SMTP_PORT
+### SMTP_PORT
 
 SMTP通信に使用するポート番号です。
 
@@ -240,7 +240,7 @@ SMTP通信に使用するポート番号です。
 
 ---
 
-SMTP_USER
+### SMTP_USER
 
 SMTP認証に使用するユーザー名です。
 
@@ -248,7 +248,7 @@ SMTP認証に使用するユーザー名です。
 
 ---
 
-SMTP_PASSWORD
+### SMTP_PASSWORD
 
 SMTP認証に使用するパスワードです。
 
@@ -256,13 +256,13 @@ SMTP認証に使用するパスワードです。
 
 ---
 
-SENDER_EMAIL
+### SENDER_EMAIL
 
 生成完了メールやエラー通知メールの送信元メールアドレスです。
 
 ---
 
-RECIPIENT_EMAIL
+### RECIPIENT_EMAIL
 
 生成完了メールやエラー通知メールの受信先メールアドレスです。
 
@@ -270,7 +270,7 @@ RECIPIENT_EMAIL
 
 ---
 
-8. GitHub Actionsを実行する
+## 8. GitHub Actionsを実行する
 
 GitHubの
 
@@ -282,7 +282,7 @@ GitHubの
 
 ---
 
-9. 生成された記事
+## 9. 生成された記事
 
 生成された記事は以下に保存されます。
 
@@ -296,7 +296,7 @@ generated/
 
 ---
 
-10. AI知識DB
+## 10. AI知識DB
 
 AIサービスの情報は、
 
@@ -310,7 +310,7 @@ utils/ai_knowledge.json
 
 ---
 
-11. テーマ・切り口の管理
+## 11. テーマ・切り口の管理
 
 テーマと切り口の組み合わせは自動的に管理されます。
 
@@ -324,7 +324,7 @@ AIが記事として成立しない組み合わせを除外し、有効な組み
 
 ---
 
-12. 記事履歴
+## 12. 記事履歴
 
 過去に生成した記事の情報は、
 
@@ -336,7 +336,7 @@ main_system/article_history.json
 
 ---
 
-13. 無料での運用について
+## 13. 無料での運用について
 
 このシステムは、外部の有料サービスへの加入なしで構築・運用できる構成になっています。
 
@@ -346,9 +346,9 @@ main_system/article_history.json
 
 ---
 
-トラブルシューティング
+## トラブルシューティング
 
-記事が生成されない
+### 記事が生成されない
 
 GitHub Actionsの実行ログを確認してください。
 
@@ -361,7 +361,7 @@ GitHub Actionsの実行ログを確認してください。
 
 ---
 
-メールが届かない
+### メールが届かない
 
 以下を確認してください。
 
@@ -376,7 +376,7 @@ SMTPサービス側で認証方式やアプリパスワードが必要な場合�
 
 ---
 
-記事生成が繰り返し失敗する
+### 記事生成が繰り返し失敗する
 
 GitHub Actionsのログからエラー内容を確認してください。
 
