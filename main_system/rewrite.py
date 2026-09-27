@@ -1,5 +1,5 @@
 from utils.gemini_client import call_gemini
-from config import GEMINI_MODEL_REWRITE
+from main_system.config import GEMINI_MODEL_REWRITE
 
 from user_config import (
     ARTICLE_MIN_LENGTH,
@@ -55,7 +55,7 @@ def rewrite_article(
     response = call_gemini(
         client=client,
         model=GEMINI_MODEL_REWRITE,
-        prompt=prompt,
+        contents=prompt,
     )
 
     return response.text
