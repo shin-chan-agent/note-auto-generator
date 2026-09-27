@@ -69,22 +69,17 @@ AI_SERVICES = [
 
 ### 文字数
 
-ARTICLE_MIN_LENGTH = 8000
-
-ARTICLE_TARGET_LENGTH = 10000
-
-ARTICLE_MAX_LENGTH = 12000
+- ARTICLE_MIN_LENGTH = 8000
+- ARTICLE_TARGET_LENGTH = 10000
+- ARTICLE_MAX_LENGTH = 12000
 
 
 ### 品質設定
 
-MIN_SCORE = 90
-
-MIN_SEO_SCORE = 90
-
-MAX_REWRITE = 3
-
-MAX_RETRY = 3
+- MIN_SCORE = 90
+- MIN_SEO_SCORE = 90
+- MAX_REWRITE = 3
+- MAX_RETRY = 3
 
 
 ## 3. GitHub Secretsを設定する
@@ -100,22 +95,17 @@ Settings → Secrets and variables → Actions
 
 ### Gemini
 
-GEMINI_API_KEY
+- GEMINI_API_KEY
 
 
 ### メール
 
-SMTP_SERVER
-
-SMTP_PORT
-
-SMTP_USER
-
-SMTP_PASSWORD
-
-SENDER_EMAIL
-
-RECIPIENT_EMAIL
+- SMTP_SERVER
+- SMTP_PORT
+- SMTP_USER
+- SMTP_PASSWORD
+- SENDER_EMAIL
+- RECIPIENT_EMAIL
 
 
 ## 4. GitHub Actionsを実行する
@@ -202,30 +192,22 @@ main_system/article_history.json
 GitHub Actionsの実行ログを確認してください。
 特に以下を確認します。
 
-GEMINI_API_KEY
-
-Gemini APIの利用状況
-
-GitHub Secretsの設定
-
-SMTP設定
+- GEMINI_API_KEY
+- Gemini APIの利用状況
+- GitHub Secretsの設定
+- SMTP設定
 
 
 ### メールが届かない
 
 以下を確認してください。
 
-SMTP_SERVER
-
-SMTP_PORT
-
-SMTP_USER
-
-SMTP_PASSWORD
-
-SENDER_EMAIL
-
-RECIPIENT_EMAI
+- SMTP_SERVER
+- SMTP_PORT
+- SMTP_USER
+- SMTP_PASSWORD
+- SENDER_EMAIL
+- RECIPIENT_EMAI
 
 
 ### 記事生成が繰り返し失敗する
