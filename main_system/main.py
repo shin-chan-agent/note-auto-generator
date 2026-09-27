@@ -213,6 +213,8 @@ def main():
             prompt=prompt,
             knowledge=knowledge,
             past_articles_text=past_articles_text,
+            theme=theme,
+            angle=angle,
         )
 
         article = result["article"]
