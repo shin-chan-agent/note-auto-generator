@@ -65,6 +65,7 @@ AI_SERVICES = [
     "Gemini",
     "Claude",
 ]
+```
 
 ### 文字数
 
@@ -87,6 +88,7 @@ GitHubリポジトリの
 
 ```python
 Settings → Secrets and variables → Actions
+```
 
 から、以下を登録します。
 
@@ -112,6 +114,7 @@ GitHubの
 
 ```python
 Actions → Note AI Agent
+```
 
 から手動実行できます。
 
@@ -127,6 +130,7 @@ generated/
    └─ 月/
       └─ YYYYMMDD_HHMMSS/
          └─ article.md
+```
 
 完成した記事は設定したメールアドレスにも送信されます。
 
@@ -137,6 +141,7 @@ AIサービスの情報は、
 
 ```python
 utils/ai_knowledge.json
+```
 
 で管理されます。
 
@@ -151,6 +156,7 @@ utils/ai_knowledge.json
 
 ```python
 main_system/combination_history.json
+```
 
 AIが記事として成立しない組み合わせを除外し、有効な組み合わせを順番に使用します。
 
@@ -163,6 +169,7 @@ AIが記事として成立しない組み合わせを除外し、有効な組み
 
 ```python
 main_system/article_history.json
+```
 
 に保存されます。
 
