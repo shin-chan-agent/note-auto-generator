@@ -75,6 +75,7 @@ THEMES = [
 
 記事の切り口を設定します。
 
+```
 ANGLES = [
     "始め方",
     "初心者向けの使い方",
@@ -82,6 +83,7 @@ ANGLES = [
     "活用アイデア",
     "失敗しやすいポイント",
 ]
+```
 
 テーマと切り口を組み合わせて記事企画を作成します。
 
@@ -93,11 +95,13 @@ ANGLES = [
 
 記事作成時に扱うAIサービスを設定します。
 
+```
 AI_SERVICES = [
     "ChatGPT",
     "Gemini",
     "Claude",
 ]
+```
 
 AIサービスの名称だけを設定してください。
 
@@ -146,9 +150,10 @@ AIが目標とする文字数です。
 
 100点満点で評価され、設定した点数以上を目標とします。
 
-例：
-
+初期値：
+```
 MIN_SCORE = 90
+```
 
 90点以上を品質基準とします。
 
@@ -158,9 +163,10 @@ MIN_SCORE = 90
 
 SEOスコアの合格基準です。
 
-例：
-
+初期値：
+```
 MIN_SEO_SCORE = 90
+```
 
 90点以上をSEO基準とします。
 
@@ -170,7 +176,10 @@ MIN_SEO_SCORE = 90
 
 品質基準を満たさなかった場合に行う自動リライトの最大回数です。
 
+初期値：
+```
 MAX_REWRITE = 3
+```
 
 3回まで自動リライトを行います。
 
@@ -180,7 +189,10 @@ MAX_REWRITE = 3
 
 Gemini APIなどでエラーが発生した場合の再試行回数です。
 
+初期値：
+```
 MAX_RETRY = 3
+```
 
 ---
 
@@ -188,7 +200,9 @@ MAX_RETRY = 3
 
 GitHubリポジトリの
 
-"Settings → Secrets and variables → Actions"
+```
+Settings → Secrets and variables → Actions
+```
 
 から設定します。
 
@@ -226,8 +240,9 @@ APIキーは "user_config.py" やPythonファイルに直接記載しないで�
 メール送信用SMTPサーバーのアドレスです。
 
 例：
-
+```
 smtp.example.com
+```
 
 利用するメールサービスのSMTPサーバーを設定してください。
 
@@ -240,8 +255,9 @@ SMTP通信に使用するポート番号です。
 利用するメールサービスの指定に合わせて設定してください。
 
 例：
-
+```
 587
+```
 
 ---
 
@@ -279,7 +295,9 @@ SMTP認証に使用するパスワードです。
 
 GitHubの
 
-"Actions → Note AI Agent"
+```
+Actions → Note AI Agent
+```
 
 から手動実行できます。
 
@@ -291,11 +309,13 @@ GitHubの
 
 生成された記事は以下に保存されます。
 
+```
 generated/
 └─ 年/
    └─ 月/
       └─ YYYYMMDD_HHMMSS/
          └─ article.md
+```
 
 完成した記事は設定したメールアドレスにも送信されます。
 
@@ -305,7 +325,9 @@ generated/
 
 AIサービスの情報は、
 
+```
 utils/ai_knowledge.json
+```
 
 で管理されます。
 
@@ -319,7 +341,9 @@ utils/ai_knowledge.json
 
 テーマと切り口の組み合わせは自動的に管理されます。
 
+```
 main_system/combination_history.json
+```
 
 AIが記事として成立しない組み合わせを除外し、有効な組み合わせを使用します。
 
@@ -333,7 +357,9 @@ AIが記事として成立しない組み合わせを除外し、有効な組み
 
 過去に生成した記事の情報は、
 
+```
 main_system/article_history.json
+```
 
 に保存されます。
 
