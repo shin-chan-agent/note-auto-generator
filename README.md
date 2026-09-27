@@ -190,6 +190,7 @@ main_system/article_history.json
 ### 記事が生成されない
 
 GitHub Actionsの実行ログを確認してください。
+
 特に以下を確認します。
 
 - GEMINI_API_KEY
