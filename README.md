@@ -38,6 +38,8 @@ Gemini APIとGitHub Actionsを使って、AI関連のnote記事を自動生成�
 
 記事の方向性、テーマ、切り口、AIサービス、文字数、品質基準などを設定できます。
 
+---
+
 ### NOTE_CONCEPT
 
 作成するnote記事全体のコンセプトを設定します。
@@ -52,7 +54,7 @@ AIを活用した仕事効率化やAIツールの実践的な使い方を、
 
 自分が作りたいnoteの方向性に合わせて変更してください。
 
-
+---
 
 ### THEMES
 
@@ -69,7 +71,7 @@ THEMES = [
 
 複数のテーマを設定できます。
 
-
+---
 
 ### ANGLES
 
@@ -89,7 +91,7 @@ ANGLES = [
 
 すべての組み合わせをそのまま使用するのではなく、AIが記事として成立するかを判定し、不適切な組み合わせを除外します。
 
-
+---
 
 ### AI_SERVICES
 
@@ -117,17 +119,23 @@ AIサービスの名称だけを設定してください。
 - ARTICLE_TARGET_LENGTH = 10000
 - ARTICLE_MAX_LENGTH = 12000
 
+---
+
 ### ARTICLE_MIN_LENGTH
 
 記事として許容する最低文字数です。
 
 この文字数を下回った記事は採用されず、再生成されます。
 
+---
+
 ### ARTICLE_TARGET_LENGTH
 
 AIが目標とする文字数です。
 
 必ずこの文字数になるわけではありませんが、記事生成時の目安として使用されます。
+
+---
 
 ### ARTICLE_MAX_LENGTH
 
@@ -144,6 +152,8 @@ AIが目標とする文字数です。
 - MAX_REWRITE = 3
 - MAX_RETRY = 3
 
+---
+
 ### MIN_SCORE
 
 記事の品質スコアの合格基準です。
@@ -157,7 +167,7 @@ MIN_SCORE = 90
 
 90点以上を品質基準とします。
 
-
+---
 
 ### MIN_SEO_SCORE
 
@@ -170,7 +180,7 @@ MIN_SEO_SCORE = 90
 
 90点以上をSEO基準とします。
 
-
+---
 
 ### MAX_REWRITE
 
@@ -183,7 +193,7 @@ MAX_REWRITE = 3
 
 3回まで自動リライトを行います。
 
-
+---
 
 ### MAX_RETRY
 
@@ -216,6 +226,8 @@ Settings → Secrets and variables → Actions
 
 - GEMINI_API_KEY
 
+---
+
 ### GEMINI_API_KEY
 
 Google AI Studioなどで取得したGemini APIキーを入力します。
@@ -237,6 +249,8 @@ APIキーは "user_config.py" やPythonファイルに直接記載しないで�
 - SENDER_EMAIL
 - RECIPIENT_EMAIL
 
+---
+
 ### SMTP_SERVER
 
 メール送信用SMTPサーバーのアドレスです。
@@ -248,7 +262,7 @@ smtp.example.com
 
 利用するメールサービスのSMTPサーバーを設定してください。
 
-
+---
 
 ### SMTP_PORT
 
@@ -261,7 +275,7 @@ SMTP通信に使用するポート番号です。
 587
 ```
 
-
+---
 
 ### SMTP_USER
 
@@ -269,7 +283,7 @@ SMTP認証に使用するユーザー名です。
 
 メールサービスによってはメールアドレスを設定します。
 
-
+---
 
 ### SMTP_PASSWORD
 
@@ -277,12 +291,13 @@ SMTP認証に使用するパスワードです。
 
 メールサービスによっては専用のアプリパスワードを使用します。
 
-
+---
 
 ### SENDER_EMAIL
 
 生成完了メールやエラー通知メールの送信元メールアドレスです。
 
+---
 
 
 ### RECIPIENT_EMAIL
@@ -392,7 +407,7 @@ GitHub Actionsの実行ログを確認してください。
 - GitHub Secretsの設定
 - "user_config.py" の設定
 
-
+---
 
 ### メールが届かない
 
@@ -407,7 +422,7 @@ GitHub Actionsの実行ログを確認してください。
 
 SMTPサービス側で認証方式やアプリパスワードが必要な場合があります。
 
-
+---
 
 ### 記事生成が繰り返し失敗する
 
