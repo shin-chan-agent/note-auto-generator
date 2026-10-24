@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: '21 16 * * *'  # 日本時間 朝1:21
+    - cron: '23 16 * * *'  # 日本時間 朝1:23
 
 permissions:
   contents: write
